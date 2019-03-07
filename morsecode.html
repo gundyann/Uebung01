@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Morse Translator</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="course03.js">
+  </script>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="mb-4">Morse Code Translator</h1>
+    <form class="">
+      <input class="form-control mb-2" id="inputField" type="text" onkeyup="translateMorseCode()" placeholder="Input text here">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="checkbox1" onchange="translateMorseCode()">
+          <label class="custom-control-label" for="checkbox1">Separete characters with "/"</label>
+        </div>
+      </div>
+      <h2 class="text-center" id="label"></h2>
+    </form>
+
+    <script>
+      var input = document.getElementById('inputField');
+      var output = document.getElementById('label');
+
+      function translateMorseCode() {
+        if (document.getElementById('checkbox1').checked == true) {
+          label.innerText = morseFont.renderWithSlash(input.value);
+        } else {
+          label.innerText = morseFont.render(input.value);
+        }
+
+      }
+    </script>
+  </div>
+
+
+</body>
+
+</html>
