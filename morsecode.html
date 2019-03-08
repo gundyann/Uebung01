@@ -26,18 +26,85 @@
 
     <script>
       var input = document.getElementById('inputField');
-      var output = document.getElementById('label');
-
       function translateMorseCode() {
         if (document.getElementById('checkbox1').checked == true) {
           label.innerText = morseFont.renderWithSlash(input.value);
         } else {
           label.innerText = morseFont.render(input.value);
         }
-
       }
     </script>
   </div>
+
+  <div class="container">
+    <h1>Morsing Tool</h1>
+    <form class="" action="index.html" method="post">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="checkbox2" onchange="enableMorse()">
+          <label class="custom-control-label" for="checkbox2">Morse with "Space" enabled</label>
+        </div>
+      </div>
+    </form>
+    <h2 class="text-center" id="label2"></h2>
+    <h2 class="text-center" id="label3"></h2>
+    <script>
+      var output = document.getElementById('label2');
+      var onKeyPressedTime = new Date();
+      var onKeyReleasedTime = new Date();
+      var pressedLock = false;
+      var morseEnabled = false;
+
+      function enableMorse() {
+        if (morseEnabled) {
+          morseEnabled = false;
+          translateCodeToString(label2.textContent);
+        } else {
+          morseEnabled = true;
+        }
+      }
+
+
+      document.onkeyup = function(e) {
+        if (morseEnabled) {
+          if (e.code == "Space") {
+            onKeyReleasedTime = new Date();
+            var timePassed = onKeyReleasedTime.getTime() - onKeyPressedTime.getTime()
+            pressedLock = false;
+            if (timePassed > 200) {
+              label2.textContent = label2.textContent + "-";
+            } else {
+              label2.textContent = label2.textContent + "."
+            }
+          }
+        }
+      }
+
+      document.onkeydown = function(e) {
+        if (morseEnabled) {
+          if (e.code == "Space") {
+            if (!pressedLock) {
+              pressedLock = true;
+              onKeyPressedTime = new Date();
+              var timeSinceLastPress = onKeyPressedTime.getTime() - onKeyReleasedTime.getTime();
+              if (timeSinceLastPress > 1000) {
+                label2.textContent = label2.textContent + " ";
+                translateCodeToString(label2.textContent);
+              }
+            }
+          } else if (e.code == "Escape") {
+            enableMorse();
+            document.getElementById("checkbox2").checked=false;
+          }
+        }
+      }
+
+      function translateCodeToString(str) {
+        label3.textContent = morseFont.renderToChar(str);
+      }
+    </script>
+  </div>
+
 
 
 </body>

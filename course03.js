@@ -5,9 +5,10 @@ function Char(value, string) {
   this.string = string;
 }
 
-function Font(name, alphabet) {
+function Font(name, alphabet, morseAlphabet) {
   this.name = name;
   this.alphabet = alphabet;
+  this.morseAlphabet = morseAlphabet;
 }
 
 /*Renders a given Text. This will turn any text into
@@ -21,6 +22,9 @@ Font.prototype.render = function(text) {
   return resultString;
 };
 
+
+/*Renders a given Text. This will turn any text into
+morse code. Each char will be seperated with a '/' charackter.*/
 Font.prototype.renderWithSlash = function(text) {
   var resultString = "";
   var textArray = text.toLowerCase().split('');
@@ -40,6 +44,25 @@ Font.prototype.write = function(text, to) {
   }
 }
 
+/*Renders a given morse String into the right characters.*/
+Font.prototype.renderToChar = function(text) {
+  var resultString = "";
+  var textArray = text.toLowerCase().split(' ');
+  console.log(textArray);
+  for (var i = 0; i < textArray.length; i++) {
+    if (textArray[i] != "") {
+      if (this.morseAlphabet[textArray[i]]) {
+
+        resultString = resultString + this.morseAlphabet[textArray[i]];
+      } else {
+        resultString = resultString + '_';
+      }
+    }
+  }
+
+  return resultString;
+}
+
 //Parse the alphabetString into the unique chars and filling them into the morse font.
 Font.prototype.fillFont = function(alphabetString) {
   var alphabetArray = alphabetString.split(';');
@@ -47,6 +70,7 @@ Font.prototype.fillFont = function(alphabetString) {
     var charToMorse = alphabetArray[i].split("=");
     var char = new Char(charToMorse[0], charToMorse[1]);
     this.alphabet[char.value] = char.string;
+    this.morseAlphabet[char.string] = char.value;
   }
 }
 
@@ -57,9 +81,9 @@ var alphabetString = "a=.-;b=-...;c=-.-.;d=-..;e=.;f=..-;g=--.;h=....;i=..;j=.--
 
 
 //The Font containing all the parsed Chars.
-var morseFont = new Font("Morse", {});
+var morseFont = new Font("Morse", {}, {});
 morseFont.fillFont(alphabetString);
-console.log(morseFont);
+
 
 
 
